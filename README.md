@@ -65,21 +65,19 @@ For more information on the technologies used in this project, refer to their of
 - [Expo Documentation](https://docs.expo.dev/)
 - [Firebase Documentation](https://firebase.google.com/docs)
 
+## Animations
+
+This project uses [Lottie](https://airbnb.io/lottie/) for high-quality, performant animations.
+
+- Add JSON animation files to `assets/animations/`
+- Use `LottieView` component in your React Native code
+
+For more details, see [Lottie React Native](https://github.com/lottie-react-native/lottie-react-native).
+
 ## Environment Setup
 
 To run this project, you need to set up your Firebase configuration. Follow these steps:
 
 1. Copy the `.env.example` file and rename it to `.env`
 2. Replace the placeholder values in the `.env` file with your actual Firebase configuration
-3. Make sure not to commit the `.env` file to the repository
-
-Example:
-
-```
-
-FIREBASE
-
-```
-
-</rewritten_file>
 ```
