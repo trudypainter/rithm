@@ -1,14 +1,24 @@
----
-
-| | | | | | | | _ \ (_) |\_ _(_)
-| |**| | \_**| | | **_ | |_) |\_ ** \_ \_ ** \_** **\_ \_** **_ | | _ \_ ** ** \_
-| ** |/ _ \ | |/ _ \ | _ <| '\_\_| | '_ \ / **/ \_ \/ **/ **| | | | | '_ \ / _` |
-| | | | **/ | | (_) | | |_) | | | | | | | (\_| **/\_\_ \__ \ | | | | | | | (_| |
-|_| |_|\_**|_|_|\_**/ |\_\_**/|_| |_|_| |_|\_**\_**||**_/_**/ |_| |_|_| |_|\__,_|
+wow this was ai generated...
 
 ```
+  _   _      _ _
+ | | | | ___| | | ___
+ | |_| |/ _ \ | |/ _ \
+ |  _  |  __/ | | (_) |
+ |_| |_|\___|_|_|\___/
 
-(that was ai generated... brincess...)
+ ♥•*¨`*•♫.•´*.¸.•´♥
+ ℙ𝕣𝕚𝕟𝕔𝕖𝕤𝕤
+   ♡❀◕‿◕❀♡
+
+    _____ _
+   |_   _(_)_ __   __ _
+     | | | | '_ \ / _` |
+     | | | | | | | (_| |
+     |_| |_|_| |_|\__,_|
+
+ ♔♕♚♛✿❀❁❃❋❀✿❀❁❃❋❀✿
+```
 
 ## Get Started
 
@@ -80,4 +90,7 @@ To run this project, you need to set up your Firebase configuration. Follow thes
 
 1. Copy the `.env.example` file and rename it to `.env`
 2. Replace the placeholder values in the `.env` file with your actual Firebase configuration
+
+```
+
 ```
