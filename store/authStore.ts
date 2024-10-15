@@ -1,6 +1,11 @@
-import { create } from 'zustand';
-import { signInWithEmailAndPassword, signOut as firebaseSignOut } from 'firebase/auth';
-import { auth } from '../firebaseConfig';
+import { create } from "zustand";
+import {
+  signInWithEmailAndPassword,
+  signOut as firebaseSignOut,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
+import { auth, db } from "../firebaseConfig";
+import { doc, setDoc } from "firebase/firestore";
 
 interface AuthState {
   user: any | null;
@@ -8,6 +13,11 @@ interface AuthState {
   error: string | null;
   signInWithEmail: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
+  signUpWithEmail: (
+    email: string,
+    password: string,
+    username: string
+  ) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
@@ -17,7 +27,11 @@ export const useAuthStore = create<AuthState>((set) => ({
   signInWithEmail: async (email: string, password: string) => {
     set({ isLoading: true, error: null });
     try {
-      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       set({ user: userCredential.user, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
@@ -28,6 +42,27 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       await firebaseSignOut(auth);
       set({ user: null, isLoading: false });
+    } catch (error: any) {
+      set({ error: error.message, isLoading: false });
+    }
+  },
+  signUpWithEmail: async (
+    email: string,
+    password: string,
+    username: string
+  ) => {
+    set({ isLoading: true, error: null });
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      await setDoc(doc(db, "users", userCredential.user.uid), {
+        username,
+        userId: userCredential.user.uid,
+      });
+      set({ user: userCredential.user, isLoading: false });
     } catch (error: any) {
       set({ error: error.message, isLoading: false });
     }
