@@ -107,7 +107,7 @@ export default function SignIn() {
 
   const slideInterpolate = slideAnimation.interpolate({
     inputRange: [0, 1],
-    outputRange: ["100%", "0%"],
+    outputRange: [100, 0], // Change this line
   });
 
   return (
