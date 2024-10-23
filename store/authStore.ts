@@ -14,6 +14,8 @@ type User = {
   username: string;
   email: string;
   profileImage?: string;
+  screenRecording?: string;
+  screenRecordingThumbnail?: string;  // Add this line
   // Add other user properties as needed
 };
 
