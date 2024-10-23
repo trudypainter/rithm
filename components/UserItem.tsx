@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 interface User {
   id: string;
-  username: string;
+  firstName: string;
   profileImage?: string;
   screenRecording?: string;
   screenRecordingThumbnail?: string;
@@ -68,7 +68,7 @@ export const UserItem: React.FC<UserItemProps> = ({ user }) => {
         </View>
 
         {/* User Information */}
-        <View className="flex-row items-center p-4">
+        <View className="flex-row items-center p-4 bg-pink-100">
           <View className="bg-gray-300 rounded-lg mr-4" style={{ height: 48, width: 48 }}> 
             <Image 
               source={user.profileImage ? { uri: user.profileImage } : require('../assets/images/icon.png')}  
@@ -78,7 +78,7 @@ export const UserItem: React.FC<UserItemProps> = ({ user }) => {
           </View>
           <View className="flex-1">
             <Text className="text-lg font-semibold">
-              {user.username}
+              {user.firstName}
               {user.birthDate && `, ${calculateAge(user.birthDate)}`}
             </Text>
           </View>

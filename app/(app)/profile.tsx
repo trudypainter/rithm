@@ -29,7 +29,7 @@ import {
   getDoc,
   Timestamp,
 } from "firebase/firestore";
-import { app } from "@/firebaseConfig"; // Adjust this import based on your Firebase setup
+import { app } from "../../firebaseConfig"; // Adjust this import based on your Firebase setup
 
 export default function ProfileScreen() {
   const { signOut, user, updateUser } = useAuthStore();
@@ -40,6 +40,7 @@ export default function ProfileScreen() {
   const [isUploading, setIsUploading] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [firstName, setFirstName] = useState<string>("");
+  const [age, setAge] = useState<number | null>(null);
 
   useEffect(() => {
     fetchUserData();
@@ -61,6 +62,9 @@ export default function ProfileScreen() {
           setVideoUri(userData.screenRecording || null);
           setVideoThumbnail(userData.screenRecordingThumbnail || null);
           setFirstName(userData.firstName || "");
+          if (userData.birthDate) {
+            setAge(calculateAge(userData.birthDate));
+          }
           console.log("Video URL:", userData.screenRecording);
           // Update the user store with the fetched data
           updateUser({
@@ -95,7 +99,7 @@ export default function ProfileScreen() {
       quality: 1,
     });
 
-    if (!result.canceled) {
+    if (!result.canceled && result.assets && result.assets.length > 0) {
       const localUri = result.assets[0].uri;
       await uploadImageToFirebase(localUri);
     }
@@ -251,7 +255,15 @@ export default function ProfileScreen() {
 
           setVideoUri(downloadURL);
           setVideoThumbnail(thumbnailDownloadURL);
-          updateUser({ ...user, ...videoData });
+        
+          // Update this line to handle null values
+          updateUser({
+            ...user,
+            screenRecording: downloadURL,
+            screenRecordingThumbnail: thumbnailDownloadURL || undefined,
+            screenRecordingTimestamp: videoData.screenRecordingTimestamp,
+            screenRecordingFilename: filename,
+          });
 
           setUploadStatus("Video uploaded successfully!");
           setIsUploading(false);
@@ -264,11 +276,12 @@ export default function ProfileScreen() {
     }
   };
 
-  const calculateAge = (birthDate: Date) => {
+  const calculateAge = (birthDate: string) => {
     const today = new Date();
-    let age = today.getFullYear() - birthDate.getFullYear();
-    const m = today.getMonth() - birthDate.getMonth();
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+    const birthDateObj = new Date(birthDate);
+    let age = today.getFullYear() - birthDateObj.getFullYear();
+    const m = today.getMonth() - birthDateObj.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDateObj.getDate())) {
       age--;
     }
     return age;
@@ -318,6 +331,7 @@ export default function ProfileScreen() {
             <View className="flex-1 justify-center items-center mt-4 mb-16">
               <Text className="text-3xl font-semibold text-center">
                 {firstName || user?.firstName || "N/A"}
+                {age !== null && `, ${age}`}
               </Text>
             </View>
 
