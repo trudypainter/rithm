@@ -13,7 +13,8 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.trudypainter.rithmscratch"
     },
     "android": {
       "adaptiveIcon": {
@@ -31,6 +32,11 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "44e631db-30ae-40b4-a36a-d55303c226cd"
+      }
     }
   }
 }
