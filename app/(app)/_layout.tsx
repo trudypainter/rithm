@@ -18,22 +18,12 @@ export default function AppLayout() {
     router.replace('/(auth)/signin');
   };
 
-  const HeaderRight = () => (
-    <TouchableOpacity onPress={() => setIsMenuVisible(true)} className="mr-4">
-      <Ionicons 
-        name="person-circle-outline" 
-        size={24} 
-        color={Colors[colorScheme ?? 'light'].text} 
-      />
-    </TouchableOpacity>
-  );
-
   return (
     <>
       <Tabs
         screenOptions={{
           tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-          headerRight: HeaderRight,
+          headerShown: false, // This will hide the header for all tab screens
         }}
       >
         <Tabs.Screen

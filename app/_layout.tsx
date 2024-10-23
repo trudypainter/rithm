@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { Slot, useSegments, useRouter } from "expo-router";
 import { useAuthStore } from "../store/authStore";
 import Toast from 'react-native-toast-message';
+import { StoreHydration } from '../components/StoreHydration';
 
 // Import your global CSS file
 import "../global.css";
@@ -25,9 +26,9 @@ const MainLayout = () => {
 
 export default function RootLayout() {
   return (
-    <>
+    <StoreHydration>
       <MainLayout />
       <Toast />
-    </>
+    </StoreHydration>
   );
 }
