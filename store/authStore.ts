@@ -11,11 +11,12 @@ import { doc, setDoc } from "firebase/firestore";
 
 type User = {
   uid: string;
-  username: string;
+  firstName: string;
   email: string;
   profileImage?: string;
   screenRecording?: string;
-  screenRecordingThumbnail?: string;  // Add this line
+  screenRecordingThumbnail?: string;
+  birthDate?: string;
   // Add other user properties as needed
 };
 
@@ -28,7 +29,8 @@ type AuthState = {
   signUpWithEmail: (
     email: string,
     password: string,
-    username: string
+    firstName: string,
+    birthDate: string
   ) => Promise<void>;
   updateUser: (user: User) => void;
 };
@@ -64,7 +66,8 @@ export const useAuthStore = create<AuthState>()(
       signUpWithEmail: async (
         email: string,
         password: string,
-        username: string
+        firstName: string,
+        birthDate: string
       ) => {
         set({ isLoading: true, error: null });
         try {
@@ -74,10 +77,12 @@ export const useAuthStore = create<AuthState>()(
             password
           );
           await setDoc(doc(db, "users", userCredential.user.uid), {
-            username,
+            firstName,
             userId: userCredential.user.uid,
+            birthDate,
+            email,
           });
-          set({ user: userCredential.user, isLoading: false });
+          set({ user: { ...userCredential.user, firstName, birthDate }, isLoading: false });
         } catch (error: any) {
           set({ error: error.message, isLoading: false });
         }

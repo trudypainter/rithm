@@ -1,31 +1,22 @@
 import React, { useState } from "react";
 import {
   View,
-  TextInput,
   TouchableOpacity,
   Animated,
-  ActivityIndicator,
+  Image,
 } from "react-native";
-import { router } from "expo-router";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
-import { Ionicons } from "@expo/vector-icons";
 import { useAuthStore } from "../../store/authStore";
-import Toast from "react-native-toast-message";
+import { SignUpForm } from './SignUpForm';
+import { SignInForm } from './SignInForm';
 
-type SignInMethod = "email" | "phone" | "email-signup" | "phone-signup" | null;
+type SignInMethod = "email" | "email-signup" | null;
 
 export default function SignIn() {
   const [signInMethod, setSignInMethod] = useState<SignInMethod>(null);
 
-  const [email, setEmail] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [password, setPassword] = useState("");
-
-  // sign up stuff
-  const [username, setUsername] = useState("");
-
-  const { signInWithEmail, signUpWithEmail, isLoading, error } = useAuthStore();
+  const { error } = useAuthStore();
 
   const slideAnimation = React.useRef(new Animated.Value(0)).current;
   const fadeAnimation = React.useRef(new Animated.Value(0)).current;
@@ -60,88 +51,47 @@ export default function SignIn() {
       }),
     ]).start(() => {
       setSignInMethod(null);
-      setEmail("");
-      setPhoneNumber("");
-      setPassword("");
-      setUsername("");
     });
-  };
-
-  const handleLogin = async () => {
-    if (signInMethod === "email") {
-      await signInWithEmail(email, password);
-      if (error) {
-        Toast.show({
-          type: "error",
-          text1: "Invalid email and sign in",
-          position: "bottom",
-          visibilityTime: 3000,
-        });
-      } else {
-        router.replace("/(app)");
-      }
-    } else {
-      // Implement phone number login logic here
-      console.log("Phone number login not implemented yet");
-    }
-  };
-
-  const handleSignUp = async () => {
-    if (signInMethod === "email-signup") {
-      await signUpWithEmail(email, password, username);
-      if (error) {
-        Toast.show({
-          type: "error",
-          text1: "Invalid email and sign in",
-          position: "bottom",
-          visibilityTime: 3000,
-        });
-      } else {
-        router.replace("/(app)");
-      }
-    } else if (signInMethod === "phone-signup") {
-      // Implement phone number sign up logic here
-      console.log("Phone number sign up not implemented yet");
-    }
   };
 
   const slideInterpolate = slideAnimation.interpolate({
     inputRange: [0, 1],
-    outputRange: [100, 0], // Change this line
+    outputRange: [100, 0],
   });
 
   return (
-    <ThemedView className="flex-1 justify-center p-5">
+    <ThemedView className="flex-1 justify-center p-5 bg-pink-200">
       {signInMethod === null ? (
         <View className="items-center">
-          <ThemedText className="text-2xl font-bold mb-5">Sign In</ThemedText>
+          <Image
+            source={require('@/assets/images/rithmlogo.png')}
+            style={{ width: '80%', aspectRatio: 1, resizeMode: 'contain' }}
+          />
           <TouchableOpacity
-            className="bg-blue-500 p-4 rounded-md my-2 w-full items-center"
+            className="bg-pink-500 p-4 rounded-full my-3 w-full items-center"
             onPress={() => handleMethodSelect("email")}
+            style={{
+              shadowColor: "#FF1493",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.5,
+              shadowRadius: 14.65,
+              elevation: 8,
+            }}
           >
-            <ThemedText className="text-white">Sign in with Email</ThemedText>
+            <ThemedText className="text-white font-bold">Sign in with Email</ThemedText>
           </TouchableOpacity>
           <TouchableOpacity
-            className="bg-blue-500 p-4 rounded-md my-2 w-full items-center"
-            onPress={() => handleMethodSelect("phone")}
-          >
-            <ThemedText className="text-white">
-              Sign in with Phone Number
-            </ThemedText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="bg-blue-400 p-4 rounded-md my-2 w-full items-center"
+            className="bg-pink-400 p-4 rounded-full my-3 w-full items-center"
             onPress={() => handleMethodSelect("email-signup")}
+            style={{
+              shadowColor: "#FF1493",
+              shadowOffset: { width: 0, height: 4 },
+              shadowOpacity: 0.5,
+              shadowRadius: 14.65,
+              elevation: 8,
+            }}
           >
-            <ThemedText className="text-white">Sign up with Email</ThemedText>
-          </TouchableOpacity>
-          <TouchableOpacity
-            className="bg-blue-400 p-4 rounded-md my-2 w-full items-center"
-            onPress={() => handleMethodSelect("phone-signup")}
-          >
-            <ThemedText className="text-white">
-              Sign up with Phone Number
-            </ThemedText>
+            <ThemedText className="text-white font-bold">Sign up with Email</ThemedText>
           </TouchableOpacity>
         </View>
       ) : (
@@ -150,90 +100,14 @@ export default function SignIn() {
           style={{ transform: [{ translateX: slideInterpolate }] }}
         >
           <Animated.View style={{ opacity: fadeAnimation }}>
-            <TouchableOpacity
-              className="absolute left-0 top-0 p-2 z-10"
-              onPress={handleBack}
-            >
-              <Ionicons name="arrow-back" size={24} color="#007AFF" />
-            </TouchableOpacity>
+            {signInMethod === "email" ? (
+              <SignInForm onBack={handleBack} />
+            ) : (
+              <SignUpForm onBack={handleBack} />
+            )}
           </Animated.View>
-          <ThemedText className="text-2xl font-bold mb-5 mt-10">
-            {signInMethod === "email" || signInMethod === "phone"
-              ? "Sign In"
-              : "Sign Up"}
-          </ThemedText>
-          {signInMethod === "email-signup" ||
-          signInMethod === "phone-signup" ? (
-            <View>
-              <TextInput
-                className="h-10 border border-gray-300 rounded-md mb-3 px-3"
-                placeholder="Username"
-                value={username}
-                onChangeText={setUsername}
-              />
-            </View>
-          ) : null}
-         
-          {(signInMethod === "email" || signInMethod === "email-signup") && (
-            <TextInput
-              className="h-10 border border-gray-300 rounded-md mb-3 px-3"
-              placeholder="Email"
-              value={email}
-              onChangeText={setEmail}
-              keyboardType="email-address"
-              autoCapitalize="none"
-            />
-          )}
-          {(signInMethod === "phone" || signInMethod === "phone-signup") && (
-            <TextInput
-              className="h-10 border border-gray-300 rounded-md mb-3 px-3"
-              placeholder="Phone Number"
-              value={phoneNumber}
-              onChangeText={setPhoneNumber}
-              keyboardType="phone-pad"
-            />
-          )}
-
-          <TextInput
-            className="h-10 border border-gray-300 rounded-md mb-3 px-3"
-            placeholder="Password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-          />
-
-          {signInMethod === "email" || signInMethod === "phone" ? (
-            <TouchableOpacity
-              className="bg-blue-500 p-4 rounded-md items-center mt-3"
-              onPress={handleLogin}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <ActivityIndicator color="white" />
-              ) : (
-                <ThemedText className="text-white font-bold">
-                  Sign In
-                </ThemedText>
-              )}
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              className="bg-blue-500 p-4 rounded-md items-center mt-3"
-              onPress={handleSignUp}
-              disabled={isLoading}
-            >
-              {isLoading ? (
-                <ActivityIndicator color="white" />
-              ) : (
-                <ThemedText className="text-white font-bold">
-                  Sign Up
-                </ThemedText>
-              )}
-            </TouchableOpacity>
-          )}
         </Animated.View>
       )}
-      <Toast />
     </ThemedView>
   );
 }
