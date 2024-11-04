@@ -1,0 +1,46 @@
+# What are we trying to build?
+- Anti self curation, the algorithm is the only thing you can't curate.
+- Revealed preferences > stated preferences
+- The algorithm is so good. It knows you better than you know yourself.
+- Mother knows best.
+
+# What does the done thing look like?
+- iOS app (on the app store)
+- web app for freaks
+
+# Marketing
+- Tina (and Trudy depending on her HAIR) film "can i see your fyp?" 
+- "what would you rate this fyp out of 10?"
+- "blind date videos"
+    - washington square park
+- help
+    - Maya 
+    - Macy Gillam
+    - sotce
+    - halle
+    - mschf
+ 
+# Events
+- Most liked videos (screenshot gallery esque)
+- Most liked profiles get invited to exclusive dinners
+- Venue:
+    - 444 broadway heart gallery
+    - typo boy in soho 
+    - index
+
+# TINA
+- [ ] Styling
+
+# TRUDY
+- [ ] Get the build working on the phone
+- [ ] Phone number verification
+
+# General 
+## Essential
+- [ ] Realtime messaging
+- [ ] matches
+- [ ] feed that filters by age, gender, and distance
+- [ ] sign up page
+
+## On the horizon
+- [ ] Product landing page with manifesto / explanation
