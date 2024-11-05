@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   signInWithEmailAndPassword,
   signOut as firebaseSignOut,
@@ -8,6 +8,7 @@ import {
 } from "firebase/auth";
 import { auth, db } from "../firebaseConfig";
 import { doc, setDoc } from "firebase/firestore";
+import { Platform } from "react-native";
 
 type User = {
   uid: string;
@@ -82,7 +83,10 @@ export const useAuthStore = create<AuthState>()(
             birthDate,
             email,
           });
-          set({ user: { ...userCredential.user, firstName, birthDate }, isLoading: false });
+          set({
+            user: { ...userCredential.user, firstName, birthDate },
+            isLoading: false,
+          });
         } catch (error: any) {
           set({ error: error.message, isLoading: false });
         }
@@ -92,7 +96,7 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "auth-storage",
       storage: createJSONStorage(() => AsyncStorage),
-      skipHydration: true,
+      skipHydration: Platform.OS === "web" ? false : true,
     }
   )
 );

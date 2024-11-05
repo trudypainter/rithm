@@ -1,8 +1,14 @@
-import React, { useEffect, useState, useRef, useCallback } from 'react';
-import { View, Text, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '@/firebaseConfig'; // Make sure this path is correct
-import { UserItem } from '@/components/UserItem'; // Import the new component
+import React, { useEffect, useState, useRef, useCallback } from "react";
+import {
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  RefreshControl,
+} from "react-native";
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "@/firebaseConfig"; // Make sure this path is correct
+import { UserItem } from "@/components/UserItem"; // Import the new component
 
 interface User {
   id: string;
@@ -18,16 +24,17 @@ export default function HomeScreen() {
 
   const fetchUsers = async () => {
     try {
-      const usersCollection = collection(db, 'users');
+      const usersCollection = collection(db, "users");
       const userSnapshot = await getDocs(usersCollection);
-      const userList = userSnapshot.docs.map(doc => ({
+      console.log(userSnapshot);
+      const userList = userSnapshot.docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
       })) as User[];
       console.log(userList);
       setUsers(userList);
     } catch (error) {
-      console.error('Error fetching users:', error);
+      console.error("Error fetching users:", error);
     } finally {
       setLoading(false);
       setRefreshing(false);

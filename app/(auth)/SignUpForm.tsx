@@ -1,27 +1,44 @@
-import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, Text, Platform, Dimensions } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import { useAuthStore } from '@/store/authStore';
+import React, { useState } from "react";
+import {
+  View,
+  TextInput,
+  TouchableOpacity,
+  Text,
+  Platform,
+  Dimensions,
+  GestureResponderEvent,
+} from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { useAuthStore } from "@/store/authStore";
 import { Picker } from "@react-native-picker/picker";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 import { FlashMessage } from "@/components/FlashMessage";
 import { router } from "expo-router";
-import { Modal } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import { Modal } from "react-native";
+import DateTimePicker from "@react-native-community/datetimepicker";
+
+// Add interface for DatePickerButton props
+interface DatePickerButtonProps {
+  date: Date;
+  onPress: () => void;
+}
 
 // DatePickerDropdown component
-const DatePickerButton = ({ date, onPress }) => {
+const DatePickerButton = ({ date, onPress }: DatePickerButtonProps) => {
   return (
-    <TouchableOpacity onPress={onPress} className="h-12 border-2 border-pink-300 rounded-md mb-4 px-4 bg-white justify-center">
+    <TouchableOpacity
+      onPress={onPress}
+      className="h-12 border-2 border-pink-300 rounded-md mb-4 px-4 bg-white justify-center"
+    >
       <Text>{date.toLocaleDateString()}</Text>
     </TouchableOpacity>
   );
 };
 
 export const SignUpForm = ({ onBack }: { onBack: () => void }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [firstName, setFirstName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
   const [birthDate, setBirthDate] = useState(new Date());
   const [flashMessage, setFlashMessage] = useState<string | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -54,32 +71,40 @@ export const SignUpForm = ({ onBack }: { onBack: () => void }) => {
     }
   };
 
-  const handleDateChange = (event, selectedDate) => {
+  const handleDateChange = (event: any, selectedDate: Date | undefined) => {
     const currentDate = selectedDate || birthDate;
     setShowDatePicker(false);
     setBirthDate(currentDate);
   };
 
-  const screenHeight = Dimensions.get('window').height;
+  const screenHeight = Dimensions.get("window").height;
 
   return (
     <KeyboardAwareScrollView
       contentContainerStyle={{ flexGrow: 1 }}
       enableOnAndroid={true}
-      enableAutomaticScroll={(Platform.OS === 'ios')}
+      enableAutomaticScroll={Platform.OS === "ios"}
       extraScrollHeight={20}
     >
-      <View style={{ minHeight: screenHeight }} className="flex-1 justify-center px-4">
+      <View
+        style={{ minHeight: screenHeight }}
+        className="flex-1 justify-center px-4"
+      >
         <View className="bg-pink-200 rounded-lg p-4">
           <FlashMessage message={flashMessage} />
-          <TouchableOpacity onPress={onBack} className="mt-3 mb-6 flex-row items-center">
+          <TouchableOpacity
+            onPress={onBack}
+            className="mt-3 mb-6 flex-row items-center"
+          >
             <Ionicons name="arrow-back" size={24} color="#D53F8C" />
             <Text className="text-pink-600 font-semibold ml-2">Back</Text>
           </TouchableOpacity>
-          
+
           <Text className="text-2xl font-bold mb-6 text-pink-800">Sign Up</Text>
-          
-          <Text className="text-lg font-semibold mb-2 text-pink-700">Account</Text>
+
+          <Text className="text-lg font-semibold mb-2 text-pink-700">
+            Account
+          </Text>
           <TextInput
             className="h-12 border-2 border-pink-300 rounded-md mb-4 px-4 bg-white"
             placeholder="Email"
@@ -96,7 +121,9 @@ export const SignUpForm = ({ onBack }: { onBack: () => void }) => {
             secureTextEntry
           />
 
-          <Text className="text-lg font-semibold mb-2 text-pink-700">Personal</Text>
+          <Text className="text-lg font-semibold mb-2 text-pink-700">
+            Personal
+          </Text>
           <TextInput
             className="h-12 border-2 border-pink-300 rounded-md mb-4 px-4 bg-white"
             placeholder="First Name"
@@ -134,7 +161,7 @@ export const SignUpForm = ({ onBack }: { onBack: () => void }) => {
               </View>
             </Modal>
           )}
-          
+
           <TouchableOpacity
             className="bg-pink-500 p-4 rounded-full items-center mt-6"
             onPress={handleSignUp}
@@ -151,11 +178,13 @@ export const SignUpForm = ({ onBack }: { onBack: () => void }) => {
             }}
           >
             <Text className="text-white font-bold text-lg">
-              {isLoading ? 'Signing Up...' : 'Sign Up'}
+              {isLoading ? "Signing Up..." : "Sign Up"}
             </Text>
           </TouchableOpacity>
-         
-          {error && <Text className="text-red-500 mt-4 text-center">{error}</Text>}
+
+          {error && (
+            <Text className="text-red-500 mt-4 text-center">{error}</Text>
+          )}
         </View>
       </View>
     </KeyboardAwareScrollView>
