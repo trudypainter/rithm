@@ -7,7 +7,7 @@ import {
   createUserWithEmailAndPassword,
 } from "firebase/auth";
 import { auth, db } from "../firebaseConfig";
-import { doc, setDoc } from "firebase/firestore";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { Platform } from "react-native";
 
 type User = {
@@ -18,7 +18,6 @@ type User = {
   screenRecording?: string;
   screenRecordingThumbnail?: string;
   birthDate?: string;
-  // Add other user properties as needed
 };
 
 type AuthState = {
@@ -50,7 +49,26 @@ export const useAuthStore = create<AuthState>()(
             email,
             password
           );
-          set({ user: userCredential.user, isLoading: false });
+          const userDoc = await doc(db, "users", userCredential.user.uid);
+          const userSnapshot = await getDoc(userDoc);
+          const userData = userSnapshot.data();
+
+          if (!userData) {
+            throw new Error("User data not found");
+          }
+
+          set({
+            user: {
+              uid: userCredential.user.uid,
+              email: userCredential.user.email!,
+              firstName: userData.firstName,
+              birthDate: userData.birthDate,
+              profileImage: userData.profileImage,
+              screenRecording: userData.screenRecording,
+              screenRecordingThumbnail: userData.screenRecordingThumbnail,
+            },
+            isLoading: false,
+          });
         } catch (error: any) {
           set({ error: error.message, isLoading: false });
         }
@@ -83,8 +101,14 @@ export const useAuthStore = create<AuthState>()(
             birthDate,
             email,
           });
+
           set({
-            user: { ...userCredential.user, firstName, birthDate },
+            user: {
+              uid: userCredential.user.uid,
+              email: userCredential.user.email!,
+              firstName,
+              birthDate,
+            },
             isLoading: false,
           });
         } catch (error: any) {
